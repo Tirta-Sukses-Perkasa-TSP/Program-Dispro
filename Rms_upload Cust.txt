@@ -1,0 +1,6 @@
+select plantcd + '/' + salespointcd + '/' + custcd,plantcd, salespointcd,custcd,yearcd,periodcd as kdcustomer_iap,SUM(qty) as qty ,kat from OPENROWSET('Microsoft.ACE.OLEDB.12.0','Excel 12.0 Xml;HDR=YES;Database=e:\omset\jan21.xlsx','SELECT * FROM [sheet1$]') a 
+where kat='GLN' group by plantcd ,salespointcd ,custcd,yearcd,periodcd,kat
+union all
+select plantcd + '/' + salespointcd + '/' + custcd,plantcd, salespointcd,custcd,yearcd,periodcd as kdcustomer_iap,SUM(qty) as qty ,'SPS' as kat from OPENROWSET('Microsoft.ACE.OLEDB.12.0','Excel 12.0 Xml;HDR=YES;Database=e:\omset\jan21.xlsx','SELECT * FROM [sheet1$]') a 
+where kat<>'GLN' group by plantcd ,salespointcd ,custcd,yearcd,periodcd,kat
+

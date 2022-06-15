@@ -1,0 +1,2 @@
+select a.kdpk,a.tglPk,c.nmcustomer + ' - ' + c.alamat as nmcustomer,c.nmkategori + ' - ' + c.keterangan as keterangan ,b.kdbarang1, b.kdbarang2 from Planning_kirim a 
+left join V_Detail_Barang_kiriman b on a.kdPK=b.kode left join V_ALL_PO_RETUR c on a.kdPK=c.kode 

@@ -1,0 +1,15 @@
+
+select *,ket1 + ket2 as keterangan,case when ket1<>'' then 'BLOM DIKUNJUNGI' when ket1='' and tglcek='1900/01/01' then 'BLOM DIKUNJUNGI' when ket2='' and tglcek<>'1900/01/01' then 'TERKUNJUNGI' else '' end as st_kunjungan  from ( 
+	select a.kdteknisi,a.kdcustomer,a.tglPlan,isnull(b.tglcek,'1900/01/01') as tglcek,a.keterangan as ket1,ISNULL(b.keterangan,'') as ket2 from ROUTE_PLAN a left join (
+		select idrute,kdcustomer,MIN(tglcek) as tglcek,SUM(unit) as unit_cek,keterangan from Real_Cek where 
+		nmrute='feb2021' and tglcek between '2021/03/01' and '2021/03/08' and kdteknisi='T08' group by idrute,kdcustomer,keterangan
+	) b on a.idrute=b.idrute where a.nmrute ='FEB2021' and a.tglPlan between '2021/03/01' and '2021/03/08' and kdteknisi='T08'
+) x
+
+union all
+
+select kdteknisi,kdcustomer,'1900/01/01' as tglplan,MIN(tglcek) as tglcek,'' from Real_Cek where
+nmrute='feb2021' and tglcek between '2021/03/01' and '2021/03/08' and 
+kdcustomer not in (select kdcustomer from ROUTE_PLAN where nmrute='feb2021' and kdteknisi='T08' ) 
+and kdteknisi='T08' group by kdteknisi,kdcustomer
+
